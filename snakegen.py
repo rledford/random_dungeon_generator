@@ -89,7 +89,7 @@ class MapGenerator(object):
         return ID
         
     def __PlaceNodesRandom(self):
-        for i in xrange(self.numNodes):
+        for i in range(self.numNodes):
             placing = True
             tryCount = 5
             while(placing):
@@ -119,7 +119,7 @@ class MapGenerator(object):
         n = 1
         while n < self.numNodes:
             if refNode < -1:
-                print "unable to place all nodes due to size constraints"
+                #print("unable to place all nodes due to size constraints")
                 break
             newDirection = directions.pop(random.randint(0,len(directions)-1))
             x = 0#newDirection.x
@@ -155,7 +155,7 @@ class MapGenerator(object):
                 refNode-=1
     
     def __InflateNodes(self):
-        for i in xrange(len(self.nodes)):
+        for i in range(len(self.nodes)):
             #make sure w and h area even numbers so division is symmetric
             w = random.randint(self.minInflation,self.maxInflation)
             if w%2 != 0:
@@ -170,7 +170,7 @@ class MapGenerator(object):
         pos = self.nodes[ignoredNodeIndex].position
         xDisplacement = self.nodes[ignoredNodeIndex].width/2
         yDisplacement = self.nodes[ignoredNodeIndex].height/2
-        for i in xrange(len(self.nodes)):
+        for i in range(len(self.nodes)):
             if i == ignoredNodeIndex:
                 continue
             xDisplacementDirection = self.__GetUnitDisplacementDirection(-(pos.x-self.nodes[i].position.x))
@@ -179,7 +179,7 @@ class MapGenerator(object):
             self.nodes[i].position.y += yDisplacementDirection*yDisplacement
             
     def __JoinNodes(self):#should be called last
-        for i in xrange(len(self.links)):
+        for i in range(len(self.links)):
             sourceNode,destinationNode,dirX,dirY = self.links[i]
             n = self.nodes[sourceNode]
             x = n.position.x + (n.width/2*dirX)
@@ -203,7 +203,7 @@ class MapGenerator(object):
         minY = 0
         maxX = 0
         maxY = 0
-        for i in xrange(len(self.nodes)):
+        for i in range(len(self.nodes)):
             if self.nodes[i].left < minX:
                 minX = self.nodes[i].left
             if self.nodes[i].top < minY:
@@ -215,7 +215,7 @@ class MapGenerator(object):
         there will be one unit between the top, bottom,
         left and right edges of the map and the closest node.
         """
-        for i in xrange(len(self.nodes)):
+        for i in range(len(self.nodes)):
             """
                         OBSERVATION
             If minX < 0 all negative x's would need to be
@@ -231,10 +231,10 @@ class MapGenerator(object):
                 maxY = self.nodes[i].bottom
         self.width = maxX+1#add an extra 1
         self.height = maxY+1#add an extra 1
-        print "max nodes:",self.numNodes
-        print "actual nodes:",len(self.nodes)
-        print "maximum size:",self.maxMapWidth,":",self.maxMapHeight
-        print "actual size: ",self.width,":",self.height
+        #print "max nodes:",self.numNodes
+        #print "actual nodes:",len(self.nodes)
+        #print "maximum size:",self.maxMapWidth,":",self.maxMapHeight
+        #print "actual size: ",self.width,":",self.height
     
     def Generate(self):
         self.nextID = 0
@@ -246,8 +246,8 @@ class MapGenerator(object):
         self.__JoinNodes()
         #get start node
         self.startNode = random.randint(int(len(self.nodes)*self.startNodeRangeLow),int(len(self.nodes)*self.startNodeRangeHigh))
-        print "start node:",self.startNode
-        print "************************************"
+        #print "start node:",self.startNode
+        #print "************************************"
                 
     def __IsValidArea(self, rect):
         for n in self.nodes:
@@ -256,14 +256,14 @@ class MapGenerator(object):
         return True
             
     def __IsValidPosition(self, pos):
-        for i in xrange(len(self.nodes)):
+        for i in range(len(self.nodes)):
             if self.nodes[i].position.x == pos.x and self.nodes[i].position.y == pos.y:
                 return False
         return True
     
     def __CheckInflation(self,ignoredNodeIndex):
         n = self.nodes[ignoredNodeIndex]#for convenience and clarity
-        for i in xrange(len(self.nodes)):
+        for i in range(len(self.nodes)):
             if i == ignoredNodeIndex:
                 continue
             if n.rect.colliderect(self.nodes[i].rect):
@@ -271,11 +271,11 @@ class MapGenerator(object):
         return True
     
     def __HandleOverlap(self):
-        for i in xrange(len(self.nodes)-1,-1,-1):
+        for i in range(len(self.nodes)-1,-1,-1):
             #check if overlap should be considered for  fixing
             if random.random() > self.overlapThreshold:
                 continue
-            for n in xrange(len(self.nodes)):
+            for n in range(len(self.nodes)):
                 if n == i:
                     continue
                 if (self.nodes[i].rect.colliderect(self.nodes[n].rect)):
@@ -284,7 +284,7 @@ class MapGenerator(object):
     
     def Draw(self, surface):
         pygame.draw.rect(surface, (128,128,128), pygame.Rect(0,0,self.width, self.height), 0)
-        for i in xrange(len(self.nodes)):
+        for i in range(len(self.nodes)):
             n = self.nodes[i]
             r = n.rect#pygame.Rect(n.position.x-n.width/2,n.position.y-n.height/2,n.width, n.height)
             if i != self.startNode:
